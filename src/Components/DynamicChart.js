@@ -13,6 +13,10 @@ import PropTypes from "prop-types";
 ChartJS.register(...registerables);
 
 function DynamicChart({ chartType, data }) {
+  const options = {
+    maintainAspectRatio: false,
+  };
+
   const BarChart = () => {
     return <Bar data={data} />;
   };
@@ -22,15 +26,15 @@ function DynamicChart({ chartType, data }) {
   };
 
   const PieChart = () => {
-    return <Pie data={data} />;
+    return <Pie options={options} height={5} width={5} data={data} />;
   };
 
   const DoughnutChart = () => {
-    return <Doughnut data={data} />;
+    return <Doughnut options={options} height={5} width={5} data={data} />;
   };
 
   const RadarChart = () => {
-    return <Radar data={data} />;
+    return <Radar options={options} height={5} width={5} data={data} />;
   };
 
   const ScatterChart = () => {
@@ -38,7 +42,7 @@ function DynamicChart({ chartType, data }) {
   };
 
   const PolarChart = () => {
-    return <PolarArea data={data} />;
+    return <PolarArea options={options} height={5} width={5} data={data} />;
   };
 
   const renderChart = (type) => {

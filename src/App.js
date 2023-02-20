@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import DynamicChart from "./Components/DynamicChart";
+import "./App.css";
+import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 function App() {
+  const [chartType, setChartType] = useState("line");
   const data = {
     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     datasets: [
@@ -58,43 +61,77 @@ function App() {
   };
 
   const chartTypes = [
-    "bar",
-    "line",
-    "pie",
-    "doughnut",
-    "radar",
-    "scatter",
-    "polar",
+    {
+      value: "bar",
+      label: "Bar Chart",
+    },
+    {
+      value: "line",
+      label: "Line Chart",
+    },
+    {
+      value: "pie",
+      label: "Pie Chart",
+    },
+    {
+      value: "doughnut",
+      label: "Doughnut Chart",
+    },
+    {
+      value: "radar",
+      label: "Radar Chart",
+    },
+    {
+      value: "scatter",
+      label: "Scatter Chart",
+    },
+    {
+      value: "polar",
+      label: "Polar Chart",
+    },
   ];
 
+  const chartTypeChange = (e) => {
+    setChartType(e.target.value);
+  };
+
+  const renderMenuItems = (menus) => {
+    return menus && menus.length > 0 ? (
+      menus.map((menu, menuIndex) => (
+        <MenuItem key={menuIndex} value={menu.value}>
+          {menu.label}
+        </MenuItem>
+      ))
+    ) : (
+      <MenuItem>Select</MenuItem>
+    );
+  };
+
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <h2>Charts</h2>
-      {chartTypes.map((type, index) => {
-        return (
-          <>
-            <h4>{type.toUpperCase()}</h4>
-            <div
-              key={index}
-              style={{
-                width: "500px",
-                height: "300px",
-                padding: "2rem",
-                display: "flex",
-                justifyContent: "center",
-              }}
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}></Grid>
+      <Grid item xs={12} md={6}>
+        <header className="p-2">
+          <FormControl fullWidth>
+            <InputLabel id="chartType">Chart Type</InputLabel>
+            <Select
+              labelId="chartType"
+              value={chartType}
+              label="ChartType"
+              onChange={chartTypeChange}
             >
-              <DynamicChart
-                chartType={type}
-                data={type === "scatter" ? scatterData : data}
-              />
-            </div>
-          </>
-        );
-      })}
-    </div>
+              {renderMenuItems(chartTypes)}
+            </Select>
+          </FormControl>
+        </header>
+        <section className="chartContainer">
+          <DynamicChart
+            chartType={chartType}
+            data={chartType === "scatter" ? scatterData : data}
+          />
+        </section>
+      </Grid>
+    </Grid>
   );
 }
 
