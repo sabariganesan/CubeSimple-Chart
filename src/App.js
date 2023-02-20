@@ -29,10 +29,6 @@ function App() {
       label: "Radar Chart",
     },
     {
-      value: "scatter",
-      label: "Scatter Chart",
-    },
-    {
       value: "polar",
       label: "Polar Chart",
     },

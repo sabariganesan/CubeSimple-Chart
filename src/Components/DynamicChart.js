@@ -58,8 +58,6 @@ function DynamicChart({ chartType, chartData, label }) {
         return <DoughnutChart />;
       case "radar":
         return <RadarChart />;
-      case "scatter":
-        return <ScatterChart />;
       case "polar":
         return <PolarChart />;
       default:
@@ -96,9 +94,7 @@ function DynamicChart({ chartType, chartData, label }) {
         dataset.borderColor.push(borderColor);
       }
     }
-    if (label) {
-      dataset.label = label;
-    }
+    dataset.label = label ? label : " ";
     if (Object.keys(dataset).length > 0) {
       chartConfig.datasets.push(dataset);
       setConfig(chartConfig);
