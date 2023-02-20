@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Bar,
   Doughnut,
@@ -12,37 +12,38 @@ import { Chart as ChartJS, registerables } from "chart.js";
 import PropTypes from "prop-types";
 ChartJS.register(...registerables);
 
-function DynamicChart({ chartType, data }) {
+function DynamicChart({ chartType, chartData, label }) {
+  const [config, setConfig] = useState(null);
   const options = {
     maintainAspectRatio: false,
   };
 
   const BarChart = () => {
-    return <Bar data={data} />;
+    return <Bar data={config} />;
   };
 
   const LineChart = () => {
-    return <Line data={data} />;
+    return <Line data={config} />;
   };
 
   const PieChart = () => {
-    return <Pie options={options} height={5} width={5} data={data} />;
+    return <Pie options={options} height={5} width={5} data={config} />;
   };
 
   const DoughnutChart = () => {
-    return <Doughnut options={options} height={5} width={5} data={data} />;
+    return <Doughnut options={options} height={5} width={5} data={config} />;
   };
 
   const RadarChart = () => {
-    return <Radar options={options} height={5} width={5} data={data} />;
+    return <Radar options={options} height={5} width={5} data={config} />;
   };
 
   const ScatterChart = () => {
-    return <Scatter data={data} />;
+    return <Scatter data={config} />;
   };
 
   const PolarChart = () => {
-    return <PolarArea options={options} height={5} width={5} data={data} />;
+    return <PolarArea options={options} height={5} width={5} data={config} />;
   };
 
   const renderChart = (type) => {
@@ -65,7 +66,50 @@ function DynamicChart({ chartType, data }) {
         return null;
     }
   };
-  return data ? renderChart(chartType) : null;
+
+  const chartDataIntoConfig = () => {
+    const chartConfig = {
+      labels: [],
+      datasets: [],
+    };
+    const dataset = {};
+
+    for (const data of chartData) {
+      const { name, quantity, bgColor, borderColor } = data;
+      if (name && quantity) {
+        if (!dataset.data) {
+          dataset.data = [];
+        }
+        chartConfig.labels.push(name);
+        dataset.data.push(quantity);
+      }
+      if (name && quantity && bgColor) {
+        if (!dataset.backgroundColor) {
+          dataset.backgroundColor = [];
+        }
+        dataset.backgroundColor.push(bgColor);
+      }
+      if (name && quantity && borderColor) {
+        if (!dataset.borderColor) {
+          dataset.borderColor = [];
+        }
+        dataset.borderColor.push(borderColor);
+      }
+    }
+    if (label) {
+      dataset.label = label;
+    }
+    if (Object.keys(dataset).length > 0) {
+      chartConfig.datasets.push(dataset);
+      setConfig(chartConfig);
+    }
+  };
+
+  useEffect(() => {
+    chartDataIntoConfig();
+  }, [chartData]);
+
+  return config ? renderChart(chartType) : null;
 }
 
 DynamicChart.propTypes = {
