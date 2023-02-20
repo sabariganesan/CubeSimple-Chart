@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DynamicChart from "./Components/DynamicChart";
-import "./App.css";
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import "./App.css";
 
 function App() {
   const [chartType, setChartType] = useState("line");
@@ -112,7 +112,7 @@ function App() {
       <Grid item xs={12} md={6}></Grid>
       <Grid item xs={12} md={6}>
         <header className="p-2">
-          <FormControl fullWidth>
+          <FormControl>
             <InputLabel id="chartType">Chart Type</InputLabel>
             <Select
               labelId="chartType"
